@@ -26,12 +26,16 @@ builder.Services.AddDbContext<DatabaseContext>(
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IRepresentanteRepository, RepresentanteRepository>();
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
+builder.Services.AddScoped<IEquipamentoRepository, EquipamentoRepository>();
+builder.Services.AddScoped<ICustoEquipamentoRepository, CustoEquipamentoRepository>();
 #endregion
 
 #region Services
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IRepresentanteService, RepresentanteService>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
+builder.Services.AddScoped<IEquipamentoService, EquipamentoService>();
+builder.Services.AddScoped<ICustoEquipamentoService, CustoEquipamentoService>();
 #endregion
 
 #region AutoMapper
@@ -61,6 +65,13 @@ var mapperConfig = new AutoMapper.MapperConfiguration(c => {
     c.CreateMap<PedidoProdutoViewModel, PedidoProdutoModel>();
     c.CreateMap<ProdutoViewModel, ProdutoModel>();
     c.CreateMap<RepresentanteViewModel, RepresentanteModel>();
+
+    c.CreateMap<CustoEquipamentoViewModel, CustoEquipamentoModel>();
+    c.CreateMap<CustoEquipamentoUpdateViewModel, CustoEquipamentoModel>();
+   
+    c.CreateMap<EquipamentoViewModel, EquipamentoModel>();
+
+
 
 
     c.CreateMap<CreatePedidoViewModel, PedidoModel>()
