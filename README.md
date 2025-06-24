@@ -5,7 +5,7 @@
 
 ## ❓ Por quê?
 Este projeto foi criado durante as aulas de .NET oferecidas durante curso de ADS na FIAP, sendo assim, eu realmente aprecio qualquer feedback que você possa me dar sobre o projeto, o código, a arquitetura, o padrão de design ou qualquer outro ponto que queira reportar — isso me ajuda a me tornar um desenvolvedor melhor.  
-Para contribuir com isso, você pode me enviar um e-mail: [dellano.liagi2004@gmail.com](mailto:dellano.liagi2004@gmail.com), se conectar comigo no [LinkedIn](https://www.linkedin.com/in/maurizio-dellano/).
+Para contribuir com isso, você pode me enviar um e-mail: [dellano.liagi2004@gmail.com](mailto:dellano.liagi2004@gmail.com), se conectar comigo no [LinkedIn](https://www.linkedin.com/in/maurizio-dellano/) ou abrir uma issue aqui [issue](https://github.com/Dellano23/EnergyApi/issues/new).
 
 ## 🔧 Requisitos
 Os requisitos funcionais e não funcionais estão neste 
