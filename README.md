@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="https://i.imgur.com/oUAKMC5.png" />
-  <h2 align="center">API para gerenciamento de consumo energético 🚗</h2>
+
+  <h2 align="center">API para gerenciamento de consumo energético ⚡</h2>
 </p>
 
 ## ❓ Por quê?
