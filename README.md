@@ -33,3 +33,12 @@ Isso significa que, sempre que algum componente precisar de um IEquipamentoRepos
 
 Por fim, utilizei o AutoMapper para automatizar o mapeamento entre as ViewModels e os Models. Isso elimina a necessidade de conversões manuais e reduz a chance de erros de mapeamento, além de manter o código mais limpo.
 
+## Funcionamento 
+
+<p align="center">
+  <a href="https://youtu.be/Ercn9bGk328" target="_blank">
+    <img src="https://img.youtube.com/vi/SEU_VIDEO_ID/0.jpg" alt="Assista ao vídeo" width="600" />
+  </a>
+</p>
+
+
