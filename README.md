@@ -34,12 +34,17 @@ Isso significa que, sempre que algum componente precisar de um IEquipamentoRepos
 Por fim, utilizei o AutoMapper para automatizar o mapeamento entre as ViewModels e os Models. Isso elimina a necessidade de conversões manuais e reduz a chance de erros de mapeamento, além de manter o código mais limpo.
 
 ## Funcionamento 
+Tendo uma média do valor do kwh, que pode ser obtido dividindo o valor total da conta de luz pelo consumo total de kwh nela, o usuário, estando devidamente logado no sistema que gera um Bearer token e permite acesso a 3 roles, pode inserir o custo do kwh e o id do equipamento que deseja realizar o cálculo.
+
+Com base no tempo de uso (minutos) registrado na model do equipamento e sua potência em Watts, temos o retorno na API do custo diário e mensal do equipamento. 
 
 <p align="center">
   <img src="EnergyApi.gif" alt="Prévia do projeto" width="600" />
 </p>
 
+Caso a visualização não esteja boa, pode ser acessado o link do vídeo diretamente no YouTube:
+
 https://youtu.be/Ercn9bGk328
 
-
+## 🔷 Diagrama do banco de dados
 
