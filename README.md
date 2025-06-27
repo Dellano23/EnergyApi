@@ -36,10 +36,10 @@ Por fim, utilizei o AutoMapper para automatizar o mapeamento entre as ViewModels
 ## Funcionamento 
 
 <p align="center">
-  <a href="https://youtu.be/Ercn9bGk328" target="_blank">
-    <img src="https://img.youtube.com/vi/Ercn9bGk328/0.jpg" alt="Assista à demonstração" width="600" />
-  </a>
+  <img src="EnergyApi.gif" alt="Prévia do projeto" width="600" />
 </p>
+
+https://youtu.be/Ercn9bGk328
 
 
 
