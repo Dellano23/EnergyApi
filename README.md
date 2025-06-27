@@ -37,8 +37,9 @@ Por fim, utilizei o AutoMapper para automatizar o mapeamento entre as ViewModels
 
 <p align="center">
   <a href="https://youtu.be/Ercn9bGk328" target="_blank">
-    <img src="https://img.youtube.com/vi/SEU_VIDEO_ID/0.jpg" alt="Assista ao vídeo" width="600" />
+    <img src="https://img.youtube.com/vi/Ercn9bGk328/0.jpg" alt="Assista à demonstração" width="600" />
   </a>
 </p>
+
 
 
