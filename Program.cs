@@ -23,17 +23,13 @@ builder.Services.AddDbContext<DatabaseContext>(
 #endregion
 
 #region Repositorios
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<IRepresentanteRepository, RepresentanteRepository>();
-builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
+
 builder.Services.AddScoped<IEquipamentoRepository, EquipamentoRepository>();
 builder.Services.AddScoped<ICustoEquipamentoRepository, CustoEquipamentoRepository>();
 #endregion
 
 #region Services
-builder.Services.AddScoped<IClienteService, ClienteService>();
-builder.Services.AddScoped<IRepresentanteService, RepresentanteService>();
-builder.Services.AddScoped<IPedidoService, PedidoService>();
+
 builder.Services.AddScoped<IEquipamentoService, EquipamentoService>();
 builder.Services.AddScoped<ICustoEquipamentoService, CustoEquipamentoService>();
 #endregion
@@ -47,36 +43,23 @@ var mapperConfig = new AutoMapper.MapperConfiguration(c => {
     // Permite que valores de destino nulos sejam mapeados
     c.AllowNullDestinationValues = true;
 
-    c.CreateMap<ClienteModel, ClienteViewModel>();
-    c.CreateMap<ClienteCreateViewModel, ClienteModel>();
+   
 
 
-    c.CreateMap<FornecedorModel, FornecedorViewModel>();
-    c.CreateMap<LojaModel, LojaViewModel>();
-    c.CreateMap<PedidoModel, PedidoViewModel>();
-    c.CreateMap<PedidoProdutoModel, PedidoProdutoViewModel>();
-    c.CreateMap<ProdutoModel, ProdutoViewModel>();
-    c.CreateMap<RepresentanteModel, RepresentanteViewModel>();
-    c.CreateMap<ClienteViewModel, ClienteModel>();
-    c.CreateMap<FornecedorViewModel, FornecedorModel>();
-    c.CreateMap<LojaViewModel, LojaModel>();
-    c.CreateMap<PedidoModel, PedidoViewModel>();
-    c.CreateMap<PedidoViewModel, PedidoModel>();
-    c.CreateMap<PedidoProdutoViewModel, PedidoProdutoModel>();
-    c.CreateMap<ProdutoViewModel, ProdutoModel>();
-    c.CreateMap<RepresentanteViewModel, RepresentanteModel>();
+    
 
     c.CreateMap<CustoEquipamentoViewModel, CustoEquipamentoModel>();
     c.CreateMap<CustoEquipamentoUpdateViewModel, CustoEquipamentoModel>();
    
     c.CreateMap<EquipamentoViewModel, EquipamentoModel>();
+    c.CreateMap<EquipamentoModel, EquipamentoViewModel>();
+    c.CreateMap<EquipamentoModel, EquipamentoCreateViewModel>();
+    c.CreateMap<EquipamentoCreateViewModel, EquipamentoModel>();
 
 
 
 
-    c.CreateMap<CreatePedidoViewModel, PedidoModel>()
-            .ForMember(dest => dest.PedidoProdutos, opt => opt.MapFrom(src =>
-                src.ProdutoIds.Select(id => new PedidoProdutoModel { ProdutoId = id }).ToList()));
+    
 
 
 });
@@ -112,8 +95,40 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
+//configura swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Energy API",
+        Version = "v1"
+    });
+
+    var securityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Insira o token JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Reference = new Microsoft.OpenApi.Models.OpenApiReference
+        {
+            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+
+    c.AddSecurityDefinition("Bearer", securityScheme);
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        { securityScheme, Array.Empty<string>() }
+    });
+});
+
+//fim configura swagger
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -26,10 +26,13 @@ namespace Fiap.Api.Energy.Data.Repository
             _context.SaveChanges();
         }
 
-        public IEnumerable<CustoEquipamentoModel> GetAll()
-        {
-            return _context.CustoEquipamento.ToList();
-        }
+        //public IEnumerable<CustoEquipamentoModel> GetAll()
+        //{
+        //    return _context.CustoEquipamento.ToList();
+        //}
+
+        public IEnumerable<CustoEquipamentoModel> GetAll() => _context.CustoEquipamento.Include(c => c.Equipamento).ToList();
+
 
         public IEnumerable<CustoEquipamentoModel> GetAllWithDetails()
         {

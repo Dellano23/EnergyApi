@@ -21,13 +21,29 @@ namespace Fiap.Api.Energy.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] EquipamentoViewModel equipamentoViewModel)
+        public ActionResult Post([FromBody] EquipamentoCreateViewModel equipamentoCreateViewModel)
         {
-            var equipamento = mapper.Map<EquipamentoModel>(equipamentoViewModel);
+            
 
-            _equipamentoService.CriarEquipamento(equipamento);
+            _equipamentoService.CriarEquipamento(equipamentoCreateViewModel);
             //return CreatedAtAction(nameof(Get), new { id = equipamento.EquipamentoId}, equipamento);
-            return StatusCode(201, equipamento);
+            return StatusCode(201, equipamentoCreateViewModel);
+        }
+
+        //get paginado
+
+        [HttpGet]
+        public ActionResult<IEnumerable<EquipamentoPaginacaoViewModel>> Get([FromQuery] int pagina = 1, [FromQuery] int tamanho = 10)
+        {
+            var equipamentos = _equipamentoService.ListarEquipamentos(pagina, tamanho);
+            var viewModelList = mapper.Map<IEnumerable<EquipamentoViewModel>>(equipamentos);
+            var viewModel = new EquipamentoPaginacaoViewModel
+            {
+                Equipamentos = viewModelList,
+                CurrentPage = pagina,
+                PageSize = tamanho
+            };
+            return Ok(viewModel);
         }
 
 

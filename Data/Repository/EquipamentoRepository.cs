@@ -1,5 +1,6 @@
 ﻿using Fiap.Api.Energy.Data.Contexts;
 using Fiap.Api.Energy.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fiap.Api.Energy.Data.Repository
 {
@@ -26,6 +27,16 @@ namespace Fiap.Api.Energy.Data.Repository
 
         public IEnumerable<EquipamentoModel> GetAll() =>
             _context.Equipamento.ToList();
+
+        //get all com paginacao (database medio)
+        public IEnumerable<EquipamentoModel> GetAllPag(int page, int size)
+        {
+            return _context.Equipamento
+                .Skip((page - 1) * page)
+                .Take(size)
+                .AsNoTracking()
+                .ToList();
+        }
 
         public EquipamentoModel GetById(int id) => _context.Equipamento.Find(id);
         public void Update(EquipamentoModel equipamento)
