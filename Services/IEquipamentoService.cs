@@ -1,4 +1,5 @@
 ﻿using Fiap.Api.Energy.Models;
+using Fiap.Api.Energy.ViewModel;
 
 namespace Fiap.Api.Energy.Services
 {
@@ -8,7 +9,7 @@ namespace Fiap.Api.Energy.Services
 
         IEnumerable<EquipamentoModel> ListarEquipamentos(int pagina = 0, int tamanho = 10);
         EquipamentoModel ObterEquipamentoPorId(int id);
-        void CriarEquipamento(EquipamentoModel equipamento);
+        void CriarEquipamento(EquipamentoCreateViewModel equipamento);
         void AtualizarEquipamento(EquipamentoModel equipamento);
         void DeletarEquipamento(int id);
     }

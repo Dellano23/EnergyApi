@@ -92,6 +92,7 @@ Services/
 ViewModel/
  CustoEquipamentoUpdateViewModel.cs
  CustoEquipamentoViewModel.cs
+ EquipamentoCreateViewModel.cs
  EquipamentoPaginacaoViewModel.cs
  EquipamentoViewModel.cs
 WeatherForecast.cs
