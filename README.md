@@ -1,6 +1,6 @@
 <p align="center">
 
-<<<<<<< HEAD
+
   <h2 align="center">API para gerenciamento de consumo energético ⚡</h2>
 </p>
 
