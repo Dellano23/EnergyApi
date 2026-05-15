@@ -18,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 #region INICIALIZANDO O BANCO DE DADOS
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 builder.Services.AddDbContext<DatabaseContext>(
-    opt => opt.UseOracle(connectionString).EnableSensitiveDataLogging(true)
+    opt => opt.UseSqlite(connectionString).EnableSensitiveDataLogging(true)
 );
 #endregion
 
@@ -36,9 +36,9 @@ builder.Services.AddScoped<ICustoEquipamentoService, CustoEquipamentoService>();
 
 #region AutoMapper
 
-// ConfiguraÁ„o do AutoMapper
+// ConfiguraÔøΩÔøΩo do AutoMapper
 var mapperConfig = new AutoMapper.MapperConfiguration(c => {
-    // Permite que coleÁıes nulas sejam mapeadas
+    // Permite que coleÔøΩÔøΩes nulas sejam mapeadas
     c.AllowNullCollections = true;
     // Permite que valores de destino nulos sejam mapeados
     c.AllowNullDestinationValues = true;
@@ -53,8 +53,6 @@ var mapperConfig = new AutoMapper.MapperConfiguration(c => {
    
     c.CreateMap<EquipamentoViewModel, EquipamentoModel>();
     c.CreateMap<EquipamentoModel, EquipamentoViewModel>();
-    c.CreateMap<EquipamentoModel, EquipamentoCreateViewModel>();
-    c.CreateMap<EquipamentoCreateViewModel, EquipamentoModel>();
 
 
 
@@ -64,10 +62,10 @@ var mapperConfig = new AutoMapper.MapperConfiguration(c => {
 
 });
 
-// Cria o mapper com base na configuraÁ„o definida
+// Cria o mapper com base na configuraÔøΩÔøΩo definida
 IMapper mapper = mapperConfig.CreateMapper();
 
-// Registra o IMapper como um serviÁo singleton no container de DI do ASP.NET Core
+// Registra o IMapper como um serviÔøΩo singleton no container de DI do ASP.NET Core
 builder.Services.AddSingleton(mapper);
 
 #endregion
@@ -95,41 +93,42 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
-//configura swagger
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(options =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Title = "Energy API",
-        Version = "v1"
-    });
-
-    var securityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Description = "Insira o token JWT",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
         Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
         Scheme = "bearer",
         BearerFormat = "JWT",
-        Reference = new Microsoft.OpenApi.Models.OpenApiReference
-        {
-            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-            Id = "Bearer"
-        }
-    };
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Insira o token JWT gerado no formato: Bearer {token}"
+    });
 
-    c.AddSecurityDefinition("Bearer", securityScheme);
-
-    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
-        { securityScheme, Array.Empty<string>() }
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
     });
 });
 
-//fim configura swagger
 var app = builder.Build();
+
+// Aplica migra√ß√µes automaticamente ao iniciar o app.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    db.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -140,6 +139,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

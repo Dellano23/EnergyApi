@@ -46,6 +46,22 @@ namespace Fiap.Api.Energy.Controllers
             return Ok(viewModel);
         }
 
+        //get paginado
+
+        [HttpGet]
+        public ActionResult<IEnumerable<EquipamentoPaginacaoViewModel>> Get([FromQuery] int pagina = 1, [FromQuery] int tamanho = 10)
+        {
+            var equipamentos = _equipamentoService.ListarEquipamentos(pagina, tamanho);
+            var viewModelList = mapper.Map<IEnumerable<EquipamentoViewModel>>(equipamentos);
+            var viewModel = new EquipamentoPaginacaoViewModel
+            {
+                Equipamentos = viewModelList,
+                CurrentPage = pagina,
+                PageSize = tamanho
+            };
+            return Ok(viewModel);
+        }
+
 
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] EquipamentoViewModel equipamentoViewModel)

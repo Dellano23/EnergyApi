@@ -8,15 +8,13 @@ namespace Fiap.Api.Energy.Data.Contexts
     public class DatabaseContext : DbContext
     {
 
-        
         public virtual DbSet<EquipamentoModel> Equipamento { get; set; }
         public virtual DbSet<CustoEquipamentoModel> CustoEquipamento { get; set; }
       
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {   
-            // Configuração para EquipamentoModel
+        {
             modelBuilder.Entity<EquipamentoModel>(entity =>
             {
                 entity.ToTable("Equipamentos");

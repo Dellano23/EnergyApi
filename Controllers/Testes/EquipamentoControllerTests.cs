@@ -26,7 +26,7 @@ namespace Fiap.Tests
         public void Post_ValidEquipamentoViewModel_ReturnsCreated()
         {
             // Arrange
-            var viewModel = new EquipamentoCreateViewModel
+            var viewModel = new EquipamentoViewModel
             {
                 EquipamentoNome = "Equip1",
                 Potencia = 10,
@@ -42,7 +42,7 @@ namespace Fiap.Tests
             };
 
             _mapperMock.Setup(m => m.Map<EquipamentoModel>(viewModel)).Returns(model);
-            _serviceMock.Setup(s => s.CriarEquipamento(viewModel));
+            _serviceMock.Setup(s => s.CriarEquipamento(model));
 
             // Act
             var result = _controller.Post(viewModel);
@@ -53,7 +53,7 @@ namespace Fiap.Tests
             Assert.Equal(model, statusCodeResult.Value);
 
             _mapperMock.Verify(m => m.Map<EquipamentoModel>(viewModel), Times.Once);
-            _serviceMock.Verify(s => s.CriarEquipamento(viewModel), Times.Once);
+            _serviceMock.Verify(s => s.CriarEquipamento(model), Times.Once);
         }
 
         [Fact]
