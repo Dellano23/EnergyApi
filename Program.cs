@@ -18,73 +18,54 @@ var builder = WebApplication.CreateBuilder(args);
 #region INICIALIZANDO O BANCO DE DADOS
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 builder.Services.AddDbContext<DatabaseContext>(
-    opt => opt.UseOracle(connectionString).EnableSensitiveDataLogging(true)
+    opt => opt.UseSqlite(connectionString).EnableSensitiveDataLogging(true)
 );
 #endregion
 
 #region Repositorios
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<IRepresentanteRepository, RepresentanteRepository>();
-builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
+
 builder.Services.AddScoped<IEquipamentoRepository, EquipamentoRepository>();
 builder.Services.AddScoped<ICustoEquipamentoRepository, CustoEquipamentoRepository>();
 #endregion
 
 #region Services
-builder.Services.AddScoped<IClienteService, ClienteService>();
-builder.Services.AddScoped<IRepresentanteService, RepresentanteService>();
-builder.Services.AddScoped<IPedidoService, PedidoService>();
+
 builder.Services.AddScoped<IEquipamentoService, EquipamentoService>();
 builder.Services.AddScoped<ICustoEquipamentoService, CustoEquipamentoService>();
 #endregion
 
 #region AutoMapper
 
-// Configuração do AutoMapper
+// Configuraï¿½ï¿½o do AutoMapper
 var mapperConfig = new AutoMapper.MapperConfiguration(c => {
-    // Permite que coleções nulas sejam mapeadas
+    // Permite que coleï¿½ï¿½es nulas sejam mapeadas
     c.AllowNullCollections = true;
     // Permite que valores de destino nulos sejam mapeados
     c.AllowNullDestinationValues = true;
 
-    c.CreateMap<ClienteModel, ClienteViewModel>();
-    c.CreateMap<ClienteCreateViewModel, ClienteModel>();
+   
 
 
-    c.CreateMap<FornecedorModel, FornecedorViewModel>();
-    c.CreateMap<LojaModel, LojaViewModel>();
-    c.CreateMap<PedidoModel, PedidoViewModel>();
-    c.CreateMap<PedidoProdutoModel, PedidoProdutoViewModel>();
-    c.CreateMap<ProdutoModel, ProdutoViewModel>();
-    c.CreateMap<RepresentanteModel, RepresentanteViewModel>();
-    c.CreateMap<ClienteViewModel, ClienteModel>();
-    c.CreateMap<FornecedorViewModel, FornecedorModel>();
-    c.CreateMap<LojaViewModel, LojaModel>();
-    c.CreateMap<PedidoModel, PedidoViewModel>();
-    c.CreateMap<PedidoViewModel, PedidoModel>();
-    c.CreateMap<PedidoProdutoViewModel, PedidoProdutoModel>();
-    c.CreateMap<ProdutoViewModel, ProdutoModel>();
-    c.CreateMap<RepresentanteViewModel, RepresentanteModel>();
+    
 
     c.CreateMap<CustoEquipamentoViewModel, CustoEquipamentoModel>();
     c.CreateMap<CustoEquipamentoUpdateViewModel, CustoEquipamentoModel>();
    
     c.CreateMap<EquipamentoViewModel, EquipamentoModel>();
+    c.CreateMap<EquipamentoModel, EquipamentoViewModel>();
 
 
 
 
-    c.CreateMap<CreatePedidoViewModel, PedidoModel>()
-            .ForMember(dest => dest.PedidoProdutos, opt => opt.MapFrom(src =>
-                src.ProdutoIds.Select(id => new PedidoProdutoModel { ProdutoId = id }).ToList()));
+    
 
 
 });
 
-// Cria o mapper com base na configuração definida
+// Cria o mapper com base na configuraï¿½ï¿½o definida
 IMapper mapper = mapperConfig.CreateMapper();
 
-// Registra o IMapper como um serviço singleton no container de DI do ASP.NET Core
+// Registra o IMapper como um serviï¿½o singleton no container de DI do ASP.NET Core
 builder.Services.AddSingleton(mapper);
 
 #endregion
@@ -112,9 +93,42 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Insira o token JWT gerado no formato: Bearer {token}"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 
 var app = builder.Build();
+
+// Aplica migraÃ§Ãµes automaticamente ao iniciar o app.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    db.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -125,6 +139,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

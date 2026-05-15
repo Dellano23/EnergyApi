@@ -6,7 +6,7 @@ namespace Fiap.Api.Energy.Services
     {
         IEnumerable<EquipamentoModel> ListarEquipamentos();
 
-        //IEnumerable<EquipamentoModel> ListarEquipamentos(int pagina = 0, int tamanho = 10);
+        IEnumerable<EquipamentoModel> ListarEquipamentos(int pagina = 0, int tamanho = 10);
         EquipamentoModel ObterEquipamentoPorId(int id);
         void CriarEquipamento(EquipamentoModel equipamento);
         void AtualizarEquipamento(EquipamentoModel equipamento);

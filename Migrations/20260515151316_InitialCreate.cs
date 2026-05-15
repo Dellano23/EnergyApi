@@ -5,7 +5,7 @@
 namespace Fiap.Api.Energy.Migrations
 {
     /// <inheritdoc />
-    public partial class EnergyEntities : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,11 +14,11 @@ namespace Fiap.Api.Energy.Migrations
                 name: "Equipamentos",
                 columns: table => new
                 {
-                    EquipamentoId = table.Column<int>(type: "NUMBER(10)", nullable: false)
-                        .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    EquipamentoNome = table.Column<string>(type: "NVARCHAR2(100)", maxLength: 100, nullable: false),
+                    EquipamentoId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    EquipamentoNome = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Potencia = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    UsoMinutoDia = table.Column<int>(type: "NUMBER(10)", nullable: false)
+                    UsoMinutoDia = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,10 +29,10 @@ namespace Fiap.Api.Energy.Migrations
                 name: "CustosEquipamento",
                 columns: table => new
                 {
-                    CustoId = table.Column<int>(type: "NUMBER(10)", nullable: false)
-                        .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
+                    CustoId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     ValorKwh = table.Column<decimal>(type: "decimal(10,4)", nullable: false),
-                    EquipamentoId = table.Column<int>(type: "NUMBER(10)", nullable: false),
+                    EquipamentoId = table.Column<int>(type: "INTEGER", nullable: false),
                     CustoEquipamentoDia = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     CustoEquipamentoMensal = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },

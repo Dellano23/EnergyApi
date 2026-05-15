@@ -30,6 +30,13 @@ namespace Fiap.Api.Energy.Services
         public IEnumerable<EquipamentoModel> ListarEquipamentos() =>
             _repository.GetAll();
 
+
+        //get com paginacao
+        public IEnumerable<EquipamentoModel> ListarEquipamentos(int pagina = 1, int tamanho = 10)
+        {
+            return _repository.GetAllPag(pagina, tamanho);
+        }
+
         public EquipamentoModel ObterEquipamentoPorId(int id) =>
             _repository.GetById(id);
         

@@ -9,7 +9,7 @@ namespace Fiap.Api.Energy.Services
         IEnumerable<CustoEquipamentoModel> ObterTodosEquipamentosComDetalhes();
         CustoEquipamentoModel ObterCustoEquipamentoPorId(int id);
         CustoEquipamentoModel ObterCustoEquipamentoPorIdComDetalhes(int id);
-        void AdicionarCustoEquipamento(CustoEquipamentoViewModel custoEquipamento);
+        CustoEquipamentoModel AdicionarCustoEquipamento(CustoEquipamentoViewModel custoEquipamento);
         void AtualizarCustoEquipamento(CustoEquipamentoModel custoEquipamento);
         void DeletarCustoEquipamento(int id);
     }

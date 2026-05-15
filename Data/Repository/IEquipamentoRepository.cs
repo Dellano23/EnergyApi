@@ -6,7 +6,7 @@ namespace Fiap.Api.Energy.Data.Repository
     {
         IEnumerable<EquipamentoModel> GetAll();
 
-        //IEnumerable<EquipamentoModel> GetAllPag(int page, int size);
+        IEnumerable<EquipamentoModel> GetAllPag(int page, int size);
         EquipamentoModel GetById(int id);
         void Add(EquipamentoModel equipamento);
         void Update(EquipamentoModel equipamento);

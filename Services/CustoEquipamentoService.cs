@@ -18,7 +18,7 @@ namespace Fiap.Api.Energy.Services
             _equipamentoRepository = equipamentoRepository;
         }
 
-        public void AdicionarCustoEquipamento(CustoEquipamentoViewModel custoEquipamentoViewModel)
+        public CustoEquipamentoModel AdicionarCustoEquipamento(CustoEquipamentoViewModel custoEquipamentoViewModel)
         {
             // 1. Buscar o equipamento no banco
             var equipamento = _equipamentoRepository.GetById(custoEquipamentoViewModel.EquipamentoId);
@@ -46,6 +46,8 @@ namespace Fiap.Api.Energy.Services
 
             // 5. Persistir no banco
             _custoEquipamentoRepository.Add(custoModel);
+
+            return custoModel;
         }
 
 
@@ -69,7 +71,7 @@ namespace Fiap.Api.Energy.Services
 
         public CustoEquipamentoModel ObterCustoEquipamentoPorId(int id)
         {
-            throw new NotImplementedException();
+            return _custoEquipamentoRepository.GetById(id);
         }
 
         public CustoEquipamentoModel ObterCustoEquipamentoPorIdComDetalhes(int id)
@@ -84,7 +86,7 @@ namespace Fiap.Api.Energy.Services
 
         public IEnumerable<CustoEquipamentoModel> ObterTodosEquipementos()
         {
-            throw new NotImplementedException();
+            return _custoEquipamentoRepository.GetAll();
         }
     }
 }
