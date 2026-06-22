@@ -23,37 +23,29 @@ namespace Fiap.Tests
         }
 
         [Fact]
-        public void Post_ValidEquipamentoViewModel_ReturnsCreated()
+        public void Post_ValidEquipamentoCreateViewModel_ReturnsCreated()
         {
             // Arrange
-            var viewModel = new EquipamentoViewModel
+            var createViewModel = new EquipamentoCreateViewModel
             {
-                EquipamentoNome = "Equip1",
-                Potencia = 10,
-                UsoMinutoDia = 30
+                EquipamentoNome = "Equip1"
+                // Adicione outros campos aqui se a sua classe CreateViewModel exigir
+                // Potencia = 10,
+                // UsoMinutoDia = 30
             };
 
-            var model = new EquipamentoModel
-            {
-                EquipamentoId = 1,
-                EquipamentoNome = "Equip1",
-                Potencia = 10,
-                UsoMinutoDia = 30
-            };
-
-            _mapperMock.Setup(m => m.Map<EquipamentoModel>(viewModel)).Returns(model);
-            _serviceMock.Setup(s => s.CriarEquipamento(model));
+            // O controller passa o CreateViewModel direto para o serviço, sem AutoMapper neste ponto
+            _serviceMock.Setup(s => s.CriarEquipamento(createViewModel));
 
             // Act
-            var result = _controller.Post(viewModel);
+            var result = _controller.Post(createViewModel);
 
             // Assert
             var statusCodeResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal(201, statusCodeResult.StatusCode);
-            Assert.Equal(model, statusCodeResult.Value);
+            Assert.Equal(createViewModel, statusCodeResult.Value);
 
-            _mapperMock.Verify(m => m.Map<EquipamentoModel>(viewModel), Times.Once);
-            _serviceMock.Verify(s => s.CriarEquipamento(model), Times.Once);
+            _serviceMock.Verify(s => s.CriarEquipamento(createViewModel), Times.Once);
         }
 
         [Fact]
@@ -64,22 +56,18 @@ namespace Fiap.Tests
 
             var viewModel = new EquipamentoViewModel
             {
-                EquipamentoNome = "Equip1 Updated",
-                Potencia = 15,
-                UsoMinutoDia = 40
+                EquipamentoNome = "Equip1 Updated"
             };
 
             var existingModel = new EquipamentoModel
             {
                 EquipamentoId = equipamentoId,
-                EquipamentoNome = "Equip1",
-                Potencia = 10,
-                UsoMinutoDia = 30
+                EquipamentoNome = "Equip1"
             };
 
             _serviceMock.Setup(s => s.ObterEquipamentoPorId(equipamentoId)).Returns(existingModel);
             _mapperMock.Setup(m => m.Map(viewModel, existingModel));
-            _serviceMock.Setup(s => s.AtualizarEquipamento(existingModel)); // CORREÇÃO
+            _serviceMock.Setup(s => s.AtualizarEquipamento(existingModel)); 
 
             // Act
             var result = _controller.Put(equipamentoId, viewModel);
@@ -98,7 +86,8 @@ namespace Fiap.Tests
             int equipamentoId = 99;
             var viewModel = new EquipamentoViewModel();
 
-            _serviceMock.Setup(s => s.ObterEquipamentoPorId(equipamentoId)).Returns((EquipamentoModel)null);
+            // Correção do aviso CS8600/CS8625 de conversão nula: adicionado o "?"
+            _serviceMock.Setup(s => s.ObterEquipamentoPorId(equipamentoId)).Returns((EquipamentoModel?)null);
 
             // Act
             var result = _controller.Put(equipamentoId, viewModel);
