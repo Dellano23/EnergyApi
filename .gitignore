@@ -2,7 +2,5 @@
 *.user
 *.suo
 *.vsidx
-*.db
 bin/
 obj/
-appsettings*.json
